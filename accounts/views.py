@@ -17,6 +17,9 @@ from carts.views import _cart_id
 import requests
 
 
+
+from tphone import settings
+from django.core.mail import EmailMultiAlternatives
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -34,15 +37,19 @@ def register(request):
             user.save()
 
             current_site = get_current_site(request=request)
-            mail_subject = 'Activate your blog account.'
+            mail_subject = 'Activate your account.'
             message = render_to_string('accounts/active_email.html', {
-                'user': user,
-                'domain': current_site.domain,
+                'full_name': user.last_name + ' ' + user.first_name,
+                'url': 'http://localhost:8000/',
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': default_token_generator.make_token(user)
             })
-            send_email = EmailMessage(mail_subject, message, to=[email])
-            send_email.send()
+
+            msg = EmailMultiAlternatives(
+                subject=mail_subject, from_email=settings.ADMIN_EMAIL, to=[email], body=""
+            )
+            msg.attach_alternative(message, "text/html")
+            msg.send()
             messages.success(
                 request=request,
                 message="Please confirm your email address to complete the registration"
