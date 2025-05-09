@@ -29,7 +29,7 @@
 									<li><a href="{% url 'store' %}">Tất cả sản phẩm</a></li>
 									{% for category in links %}
 									<li>
-										<a href="{{ category.get_url }}">{{ category.category_name }}</a>
+										<a href="{{ category.get_url }}?page=1">{{ category.category_name }}</a>
 									</li>
 									{% endfor %}
 								</ul>
@@ -70,15 +70,15 @@
 					<ul class="pagination">
 						{% if products.has_previous %}
 						<li class="page-item">
-							<a class="page-link" href="{% url 'store' %}?page=1">Đầu tiên</a>
+							<a class="page-link" href="{{ category.get_url }}?page=1">Đầu tiên</a>
 						</li>
 						<li class="page-item">
 							<a class="page-link"
-								href="{% url 'store' %}?page={{products.previous_page_number}}">Trước đó</a>
+								href="{{ category.get_url }}?page={{products.previous_page_number}}">Trước đó</a>
 						</li>
 						{% else %}
 						<li class="page-item disabled">
-							<a class="page-link" href="#">Đầu tiên</a>
+							<a class="page-link" href="{{ category.get_url }}">Đầu tiên</a>
 						</li>
 						<li class="page-item disabled">
 							<a class="page-link" href="#">Trước đó</a>
@@ -97,7 +97,7 @@
 						</li>
 						{% else %}
 						<li class="page-item">
-							<a class="page-link" href="{% url 'store' %}?page={{ page }}">{{ page }}</a>
+							<a class="page-link" href="{{ category.get_url }}?page={{ page }}">{{ page }}</a>
 						</li>
 						{% endif %}
 						{% endif %}
@@ -109,11 +109,11 @@
 						{% endif %}
 						{% if products.has_next %}
 						<li class="page-item">
-							<a class="page-link" href="{% url 'store' %}?page={{products.next_page_number}}">Next</a>
+							<a class="page-link" href="{{ category.get_url }}?page={{products.next_page_number}}">Tiếp</a>
 						</li>
 						<li class="page-item">
 							<a class="page-link"
-								href="{% url 'store' %}?page={{ products.paginator.num_pages }}">Last</a>
+								href="{{ category.get_url }}?page={{ products.paginator.num_pages }}">Cuối cùng</a>
 						</li>
 						{% else %}
 						<li class="page-item disabled">
